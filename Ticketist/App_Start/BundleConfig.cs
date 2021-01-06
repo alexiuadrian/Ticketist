@@ -8,8 +8,22 @@ namespace Ticketist
         // For more information on bundling, visit https://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+
+            bundles.Add(new ScriptBundle("~/bundles/lib").Include(
+                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/bootstrap.js",
+                "~/Scripts/respond.js",
+                "~/scripts/datatables/jquery.datatables.js",
+                "~/scripts/datatables/datatables.bootstrap.js",
+                "~/Scripts/jquery.validate.js",
+                "~/Scripts/bs-init.js",
+                "~/Scripts/jquery.min.js"
+            ));
+
+            /*
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
+            */
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
@@ -24,7 +38,13 @@ namespace Ticketist
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/content/datatables/css/datatables.bootstrap.css",
+                      "~/Content/site.css",
+                      "~/Content/css/Footer-Basic.css",
+                      "~/Content/css/Header-Blue.css",
+                      "~/Content/css/Header-Dark.css",
+                      "~/Content/css/Navigation-with-Button.css",
+                      "~/Content/css/Projects-Horizontal.css"));
         }
     }
 }

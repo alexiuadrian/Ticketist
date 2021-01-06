@@ -7,16 +7,19 @@
 
     <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            <span class="navbar-text actions" data-bs-hover-animate="jello">
+                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @style = "margin: 20px;color: var(--dark);" })
+            </span>
         </li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><span class="navbar-text actions"><a class="btn btn-light action-button" role="button" data-bs-hover-animate="swing" href="#" style="background: #56c6c6;" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></span></li>
     </ul>
     }
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
+<ul class="nav navbar-nav navbar-right">
+    <span class="navbar-text actions" data-bs-hover-animate="swing">
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-light action-button", @role = "button", @style = "background: #56c6c6;" })</li>
+    </span>
+</ul>
 }
