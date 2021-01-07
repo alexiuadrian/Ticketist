@@ -8,11 +8,14 @@ namespace Ticketist.Models
         [Required]
         public int Id { get; set; }
 
+        [Required]
         [StringLength(1000)]
         public string Description { get; set; }
 
+        [Required]
         public int TicketId { get; set; }
 
+        [Required]
         public DateTime CreationDate { get; set; }
     }
 }

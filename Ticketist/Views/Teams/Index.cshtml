@@ -1,0 +1,47 @@
+﻿@model Ticketist.ViewModels.TeamsViewModel
+
+@{
+    ViewBag.Title = "Teams";
+}
+
+<h2>Teams</h2>
+
+@Html.ActionLink("New Team", "Add", "Teams", null, new { @class = "btn btn-primary" })
+<br>
+<br />
+
+@if (Model.Teams.Count() == 0)
+{
+    <text>There are no teams.</text>
+}
+else
+{
+    <table id="teams" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Code</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var team in Model.Teams)
+            {
+                <tr>
+                    <td>@Html.ActionLink(team.Name, "Edit", "Teams", new { id = team.Id }, null)</td>
+                    <td>@team.Code</td>
+                    <td>@Html.ActionLink("Delete", "Delete", "Teams", new { id = team.Id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#teams").DataTable();
+        });
+    </script>
+}

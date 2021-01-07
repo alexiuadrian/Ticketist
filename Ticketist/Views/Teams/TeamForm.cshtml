@@ -1,0 +1,43 @@
+﻿@model Ticketist.ViewModels.TeamAndProjectsViewModel
+@{
+    ViewBag.Title = "New Team";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (Model.Team.Id == 0)
+{
+    <h2>New Team</h2>
+}
+else
+{
+    <h2>Edit Team</h2>
+}
+
+@using (Html.BeginForm("Save", "Teams"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Team.Name)
+        @Html.TextBoxFor(m => m.Team.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Team.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Team.Code)
+        @Html.TextBoxFor(m => m.Team.Code, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Team.Code)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Team.ProjectId)
+        @Html.DropDownListFor(m => m.Team.ProjectId, new SelectList(Model.Projects, "Id", "Name"), "Select Project", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Team.ProjectId)
+    </div>
+    @Html.HiddenFor(m => m.Team.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

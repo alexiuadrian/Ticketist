@@ -1,0 +1,19 @@
+﻿<nav class="navbar navbar-light navbar-expand-md navigation-clean-button" style="box-shadow: 0px 0px, 0px 0px 9px 0px;">
+    <div class="container">
+        <span data-bs-hover-animate="rubberBand">
+            @Html.ActionLink("Ticketist", "Index", "Home", new { area = "" }, new { @class = "navbar-brand", style = "color: #56c6c6;font-size: 25px;" })
+        </span>
+    <!--
+    <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+    -->
+        <div class="collapse navbar-collapse text-wrap" id="navcol-1">
+            <ul class="nav navbar-nav mr-auto">
+                <li class="nav-item">@Html.ActionLink("Organizations", "", "Organizations", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Projects", "", "Projects", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Teams", "", "Teams", null, new { @class = "nav-link" })</li>
+                <li class="nav-item">@Html.ActionLink("Tickets", "", "Tickets", null, new { @class = "nav-link" })</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
+    </div>
+</nav>

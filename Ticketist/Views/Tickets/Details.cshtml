@@ -1,7 +1,39 @@
-﻿
+﻿@using Ticketist.Models
+@model Ticketist.ViewModels.TicketAndReporterAndProjectAndStatusViewModel
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+@foreach (var project in Model.Projects)
+{
+    if (project.Id == Model.Ticket.ProjectId)
+    {
+        <p>@project.Name / @Model.Ticket.Id</p>
+    }
+}
 
+<br />
+@Html.ActionLink("Edit Ticket", "Edit", "Tickets", Model.Ticket.Id, new { @class = "btn btn-success" })
+
+<br/>
+
+<h1 class="display-4">@Model.Ticket.Name</h1>
+@foreach (var status in Model.Statuses)
+{
+    if (status.Id == Model.Ticket.StatusId)
+    {
+        <p>Status: @status.Name</p>
+    }
+}
+<hr class="my-4">
+
+<h4>Summary</h4>
+<div class="jumbotron">
+    <h4>@Model.Ticket.Summary</h4>
+</div>
+<hr />
+
+<br />
+
+<h4>Comments</h4>
+<hr />

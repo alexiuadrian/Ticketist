@@ -1,7 +1,49 @@
-﻿
+﻿@model Ticketist.ViewModels.TicketAndReporterAndProjectAndStatusViewModel
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Ticket";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+@if (Model.Ticket.Id == 0)
+{
+    <h2>New Ticket</h2>
+}
+else
+{
+    <h2>Edit Ticket</h2>
+}
 
+@using (Html.BeginForm("Save", "Tickets"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ticket.Name)
+        @Html.TextBoxFor(m => m.Ticket.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ticket.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ticket.Summary)
+        @Html.TextAreaFor(m => m.Ticket.Summary, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ticket.Summary)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ticket.StatusId)
+        @Html.DropDownListFor(m => m.Ticket.StatusId, new SelectList(Model.Statuses, "Id", "Name"), "Select Status", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ticket.StatusId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Ticket.ProjectId)
+        @Html.DropDownListFor(m => m.Ticket.ProjectId, new SelectList(Model.Projects, "Id", "Name"), "Select Project", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Ticket.ProjectId)
+    </div>
+    @Html.HiddenFor(m => m.Ticket.Id)
+    @Html.HiddenFor(m => m.Ticket.CreationDate)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

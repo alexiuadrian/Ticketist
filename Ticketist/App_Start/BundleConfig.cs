@@ -10,14 +10,11 @@ namespace Ticketist
         {
 
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery-3.4.1.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/respond.js",
                 "~/scripts/datatables/jquery.datatables.js",
-                "~/scripts/datatables/datatables.bootstrap.js",
-                "~/Scripts/jquery.validate.js",
-                "~/Scripts/bs-init.js",
-                "~/Scripts/jquery.min.js"
+                "~/scripts/datatables/datatables.bootstrap.js"
             ));
 
             /*
@@ -33,18 +30,10 @@ namespace Ticketist
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
-
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/content/datatables/css/datatables.bootstrap.css",
-                      "~/Content/site.css",
-                      "~/Content/css/Footer-Basic.css",
-                      "~/Content/css/Header-Blue.css",
-                      "~/Content/css/Header-Dark.css",
-                      "~/Content/css/Navigation-with-Button.css",
-                      "~/Content/css/Projects-Horizontal.css"));
+                "~/content/datatables/css/datatables.bootstrap.css",
+                "~/content/bootstrap.css",
+                "~/Content/site.css"));
         }
     }
 }

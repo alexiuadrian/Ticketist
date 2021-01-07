@@ -1,0 +1,53 @@
+﻿@model Ticketist.ViewModels.ProjectsAndOrganizationsViewModel
+@{
+    if (Model.Project.Id == 0)
+    {
+        ViewBag.Title = "New Project";
+        <h2>New Project</h2>
+    }
+    else
+    {
+        ViewBag.Title = "Edit Project";
+        <h2>Edit Project</h2>
+    }
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Save", "Projects"))
+{
+    @Html.ValidationSummary()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.Name)
+        @Html.TextBoxFor(m => m.Project.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.Name)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.Description)
+        @Html.TextAreaFor(m => m.Project.Description, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.Description)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.StartDate)
+        @Html.TextBoxFor(m => m.Project.StartDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.StartDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.EndDate)
+        @Html.TextBoxFor(m => m.Project.EndDate, "{0:dd/MM/yyyy}", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.EndDate)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Project.OrganizationId)
+        @Html.DropDownListFor(m => m.Project.OrganizationId, new SelectList(Model.Organizations, "Id", "Name"), "Select Organization", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Project.OrganizationId)
+    </div>
+    @Html.HiddenFor(m => m.Project.Id)
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary">Save</button>
+
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}

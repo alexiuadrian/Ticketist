@@ -1,19 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
+using Ticketist.Models;
+using Ticketist.ViewModels;
 
 namespace Ticketist.Controllers
 {
     public class OrganizationsController : Controller
     {
+        private ApplicationDbContext _context;
+
+        public OrganizationsController()
+        {
+            _context = new ApplicationDbContext();
+        }
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+        
         // GET: Organization
         public ActionResult Index()
         {
             // Afiseaza toate organizatiile din baza de date
 
-            return View();
+            var viewModel = new OrganizationsViewModel()
+            {
+                Organizations = _context.Organizations.ToList()
+            };
+            
+            return View(viewModel);
         }
 
         // GET: Organizations/Details/id
@@ -25,13 +44,46 @@ namespace Ticketist.Controllers
             return View();
         }
 
+        public ActionResult Save(Organization organization)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("OrganizationForm", organization);
+            }
+
+            if (organization.Id == 0)
+            {
+                _context.Organizations.Add(organization);
+            }
+            else
+            {
+                var organizationInDb = _context.Organizations.Single(o => o.Id == organization.Id);
+
+                organizationInDb.Name = organization.Name;
+                organizationInDb.Code = organization.Code;
+                organizationInDb.Description = organization.Description;
+                organizationInDb.FoundationYear = organization.FoundationYear;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Organizations");
+        }
+        
         // GET: Organizations/Edit/id
         [Route("Organizations/Edit/{Id}")]
         public ActionResult Edit(int Id)
         {
             // Editeaza o organizatie (View separat fata de cel de detalii)
 
-            return View();
+            var organization = _context.Organizations.SingleOrDefault(o => o.Id == Id);
+
+            if (organization == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View("OrganizationForm", organization);
         }
 
         // PUT: Organizations/Add
@@ -40,7 +92,12 @@ namespace Ticketist.Controllers
         {
             // Adauga o organizatie
 
-            return View();
+            var organization = new Organization()
+            {
+                FoundationYear = DateTime.Today.Year
+            };
+            
+            return View("OrganizationForm", organization);
         }
 
         // DELETE: Organizations/Delete/id
@@ -49,7 +106,18 @@ namespace Ticketist.Controllers
         {
             // Sterge o organizatie
 
-            return View("Index");
+            var organization = _context.Organizations.SingleOrDefault(o => o.Id == Id);
+
+            if (organization == null)
+            {
+                return HttpNotFound();
+            }
+
+            _context.Organizations.Remove(organization);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Organizations");
         }
     }
 }

@@ -1,7 +1,65 @@
-﻿
+﻿@using Microsoft.AspNet.Identity
+@model Ticketist.ViewModels.TicketsViewModel
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Tickets";
 }
 
 <h2>Tickets</h2>
 
+@Html.ActionLink("New Ticket", "Add", "Tickets", null, new { @class = "btn btn-primary" })
+<br>
+<br />
+
+@if (Model.Tickets.Count() == 0)
+{
+    <text>There are no tickets.</text>
+}
+else
+{
+    <table id="tickets" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Ticket</th>
+                <th>Reporter</th>
+                <th>Creation Date</th>
+                <th>Status</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            @foreach (var ticket in Model.Tickets)
+            {
+                <tr>
+                    <td>@Html.ActionLink(ticket.Name, "Details", "Tickets", new { id = ticket.Id }, null)</td>
+                    <td>@ticket.Reporter</td>
+                    <td>@ticket.CreationDate.ToString("dd.MM.yyyy hh:mm")</td>
+                    @foreach (var status in Model.Statuses)
+                    {
+                        if (status.Id == ticket.StatusId)
+                        {
+                            if (status.Name.Contains("DONE"))
+                            {
+                                <td class="bg-success text-center"><span class="text-wrap">@status.Name</span></td>
+                            }
+                            else
+                            {
+                                <td class="bg-warning text-center"><span class="text-wrap">@status.Name</span></td>
+                            }
+                        }
+                    }
+                    <td class="text-center">@Html.ActionLink("Delete", "Delete", "Tickets", new { id = ticket.Id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#tickets").DataTable();
+        });
+    </script>
+}

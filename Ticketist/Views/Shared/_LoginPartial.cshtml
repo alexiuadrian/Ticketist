@@ -5,21 +5,19 @@
     {
     @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
-        <li>
-            <span class="navbar-text actions" data-bs-hover-animate="jello">
-                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @style = "margin: 20px;color: var(--dark);" })
+    <div class="d-flex justify-content-center navbar-right ">
+        <span class="navbar-text actions" data-bs-hover-animate="jello">
+                @Html.ActionLink(User.Identity.GetUserName(), "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @style = "color: var(--dark);" })
             </span>
-        </li>
-        <li><span class="navbar-text actions"><a class="btn btn-light action-button" role="button" data-bs-hover-animate="swing" href="#" style="background: #56c6c6;" href="javascript:document.getElementById('logoutForm').submit()">Log off</a></span></li>
-    </ul>
+        <span class="navbar-text actions">
+            <a class="badge action-button" role="button" data-bs-hover-animate="swing" style="background: #56c6c6;" href="javascript:document.getElementById('logoutForm').submit()">Log off</a>
+        </span>
+    </div>
     }
 }
 else
 {
-<ul class="nav navbar-nav navbar-right">
-    <span class="navbar-text actions" data-bs-hover-animate="swing">
-        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "btn btn-light action-button", @role = "button", @style = "background: #56c6c6;" })</li>
-    </span>
-</ul>
+    <div class="d-flex justify-content-center navbar-right navbar-text">
+        @Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class = "badge action-button", @role = "button", @style = "background: #56c6c6;" })
+    </div>
 }

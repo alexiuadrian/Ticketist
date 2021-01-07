@@ -188,12 +188,6 @@
     <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Controllers\TeamsController.cs" />
     <Compile Include="Controllers\TicketsController.cs" />
-    <Compile Include="Dtos\CommentDto.cs" />
-    <Compile Include="Dtos\OrganizationDto.cs" />
-    <Compile Include="Dtos\ProjectDto.cs" />
-    <Compile Include="Dtos\StatusDto.cs" />
-    <Compile Include="Dtos\TeamDto.cs" />
-    <Compile Include="Dtos\Ticket.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,9 +219,22 @@
     <Compile Include="Migrations\202101061456002_AddedAllTables.Designer.cs">
       <DependentUpon>202101061456002_AddedAllTables.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101062338508_AddedRequiredDataAnnotations.cs" />
+    <Compile Include="Migrations\202101062338508_AddedRequiredDataAnnotations.Designer.cs">
+      <DependentUpon>202101062338508_AddedRequiredDataAnnotations.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101071331161_UpdatedReporterTypeInTicket.cs" />
+    <Compile Include="Migrations\202101071331161_UpdatedReporterTypeInTicket.Designer.cs">
+      <DependentUpon>202101071331161_UpdatedReporterTypeInTicket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.cs" />
+    <Compile Include="Migrations\202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.Designer.cs">
+      <DependentUpon>202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\EndDateLowerThanStartDateValidation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Organization.cs" />
@@ -235,8 +242,16 @@
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\YearLowerThanCurrentValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\OrganizationsViewModel.cs" />
+    <Compile Include="ViewModels\ProjectsAndOrganizationsViewModel.cs" />
+    <Compile Include="ViewModels\ProjectsViewModel.cs" />
+    <Compile Include="ViewModels\TeamAndProjectsViewModel.cs" />
+    <Compile Include="ViewModels\TeamsViewModel.cs" />
+    <Compile Include="ViewModels\TicketAndReporterAndProjectAndStatusViewModel.cs" />
+    <Compile Include="ViewModels\TicketsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-Ticketist-20210105103010.mdf" />
@@ -575,13 +590,17 @@
     <Content Include="Views\Tickets\Index.cshtml" />
     <Content Include="Views\Tickets\Details.cshtml" />
     <Content Include="Views\Tickets\TicketsForm.cshtml" />
+    <Content Include="Views\Shared\_NavBar.cshtml" />
+    <Content Include="Views\Organizations\Index.cshtml" />
+    <Content Include="Views\Organizations\OrganizationForm.cshtml" />
+    <Content Include="Views\Projects\Index.cshtml" />
+    <Content Include="Views\Projects\ProjectForm.cshtml" />
+    <Content Include="Views\Teams\Index.cshtml" />
+    <Content Include="Views\Teams\TeamForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Comments\" />
     <Folder Include="Views\Controllers\" />
-    <Folder Include="Views\Organization\" />
-    <Folder Include="Views\Projects\" />
-    <Folder Include="Views\Teams\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -617,6 +636,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101061456002_AddedAllTables.resx">
       <DependentUpon>202101061456002_AddedAllTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101062338508_AddedRequiredDataAnnotations.resx">
+      <DependentUpon>202101062338508_AddedRequiredDataAnnotations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101071331161_UpdatedReporterTypeInTicket.resx">
+      <DependentUpon>202101071331161_UpdatedReporterTypeInTicket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.resx">
+      <DependentUpon>202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

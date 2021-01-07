@@ -3,17 +3,65 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Ticketist.Models;
+using Ticketist.ViewModels;
 
 namespace Ticketist.Controllers
 {
     public class TeamsController : Controller
     {
+        private ApplicationDbContext _context;
+
+        public TeamsController()
+        {
+            _context = new ApplicationDbContext();
+        }
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+        }
+
         // GET: Teams
         public ActionResult Index()
         {
             // Afiseaza toate echipele din baza de date
 
-            return View();
+            var viewModel = new TeamsViewModel()
+            {
+                Teams = _context.Teams.ToList()
+            };
+            
+            return View(viewModel);
+        }
+
+        public ActionResult Save(Team team)
+        {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new TeamAndProjectsViewModel()
+                {
+                    Team = team,
+                    Projects = _context.Projects.ToList()
+                };
+                return View("TeamForm", viewModel);
+            }
+
+            if (team.Id == 0)
+            {
+                _context.Teams.Add(team);
+            }
+            else
+            {
+                var teamInDb = _context.Teams.Single(o => o.Id == team.Id);
+
+                teamInDb.Name = team.Name;
+                teamInDb.Code = team.Code;
+                teamInDb.ProjectId = team.ProjectId;
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Teams");
         }
 
         // GET: Teams/Details/id
@@ -31,7 +79,15 @@ namespace Ticketist.Controllers
         {
             // Editeaza o echipa (View separat fata de cel de detalii)
 
-            return View();
+            var team = _context.Teams.SingleOrDefault(t => t.Id == Id);
+
+            var viewModel = new TeamAndProjectsViewModel()
+            {
+                Team = team,
+                Projects = _context.Projects.ToList()
+            };
+            
+            return View("TeamForm", viewModel);
         }
 
         // PUT: Teams/Add
@@ -40,7 +96,13 @@ namespace Ticketist.Controllers
         {
             // Adauga o echipa
 
-            return View();
+            var viewModel = new TeamAndProjectsViewModel()
+            {
+                Team = new Team(),
+                Projects = _context.Projects.ToList()
+            };
+            
+            return View("TeamForm", viewModel);
         }
 
         // DELETE: Teams/Delete/id
@@ -48,8 +110,19 @@ namespace Ticketist.Controllers
         public ActionResult Delete(int Id)
         {
             // Sterge o echipa
+            
+            var team = _context.Teams.SingleOrDefault(o => o.Id == Id);
 
-            return View("Index");
+            if (team == null)
+            {
+                return HttpNotFound();
+            }
+
+            _context.Teams.Remove(team);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Teams");
         }
     }
 }

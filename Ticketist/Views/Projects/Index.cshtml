@@ -1,0 +1,47 @@
+﻿@model Ticketist.ViewModels.ProjectsViewModel
+
+@{
+    ViewBag.Title = "Projects";
+}
+
+<h2>Projects</h2>
+
+@Html.ActionLink("New Project", "Add", "Projects", null, new { @class = "btn btn-primary" })
+<br>
+<br />
+
+@if (Model.Projects.Count() == 0)
+{
+    <text>There are no projects.</text>
+}
+else
+{
+    <table id="projects" class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Project</th>
+            <th>Start Date</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var project in Model.Projects)
+        {
+            <tr>
+                <td>@Html.ActionLink(project.Name, "Edit", "Projects", new {id = project.Id}, null)</td>
+                <td>@project.StartDate.ToString("dd.MM.yyyy")</td>
+                <td>@Html.ActionLink("Delete", "Delete", "Projects", new {id = project.Id}, new {@class = "btn btn-danger"})</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#projects").DataTable();
+        });
+    </script>
+}
