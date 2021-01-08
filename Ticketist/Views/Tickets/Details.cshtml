@@ -15,7 +15,7 @@
 <br />
 @Html.ActionLink("Edit Ticket", "Edit", "Tickets", Model.Ticket.Id, new { @class = "btn btn-success" })
 
-<br/>
+<br />
 
 <h1 class="display-4">@Model.Ticket.Name</h1>
 @foreach (var status in Model.Statuses)
@@ -37,3 +37,31 @@
 
 <h4>Comments</h4>
 <hr />
+
+@if (!Model.Comments.Any())
+{
+    <h3>There are no comments</h3>
+}
+else
+{
+    foreach (var comment in Model.Comments)
+    {
+        <h4>@comment.User at @comment.CreationDate</h4>
+        <div>
+            <br />
+            <h4>@comment.Description</h4>
+            <br />
+            <br />
+        </div>
+
+        @Html.ActionLink("Edit Comment", "Edit", "Comments", new { id = comment.Id }, new { @class = "btn btn-warning" })
+        <br/>
+        <br/>
+        @Html.ActionLink("Delete Comment", "Delete", "Comments", new { id = comment.Id }, new { @class = "btn btn-danger" })
+        <br/>
+        <hr/>
+    }
+}
+<br />
+<br />
+@Html.ActionLink("Add Comment", "Add", "Comments", new { TicketId = Model.Ticket.Id }, new { @class = "btn btn-success" })

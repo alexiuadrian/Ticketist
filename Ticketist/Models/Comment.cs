@@ -7,6 +7,9 @@ namespace Ticketist.Models
     {
         [Required]
         public int Id { get; set; }
+        
+        [Required] 
+        public string User { get; set; }
 
         [Required]
         [StringLength(1000)]

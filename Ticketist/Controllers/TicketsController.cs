@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -49,11 +50,22 @@ namespace Ticketist.Controllers
                 return HttpNotFound();
             }
 
+            List<Comment> comments = new List<Comment>();
+
+            foreach (var comment in _context.Comments.ToList())
+            {
+                if (comment.TicketId == Id)
+                {
+                    comments.Add(comment);
+                }
+            }
+
             var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
             {
                 Ticket = ticket,
                 Projects = _context.Projects.ToList(),
-                Statuses = _context.Statuses.ToList()
+                Statuses = _context.Statuses.ToList(),
+                Comments = comments
             };
             
             return View("Details", viewModel);

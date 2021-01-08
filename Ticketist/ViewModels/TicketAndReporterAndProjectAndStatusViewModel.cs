@@ -8,5 +8,6 @@ namespace Ticketist.ViewModels
         public Ticket Ticket { get; set; }
         public IEnumerable<Project> Projects { get; set; }
         public IEnumerable<Status> Statuses { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
     }
 }

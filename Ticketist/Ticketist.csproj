@@ -231,6 +231,10 @@
     <Compile Include="Migrations\202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.Designer.cs">
       <DependentUpon>202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101081852365_AddedUserToComment.cs" />
+    <Compile Include="Migrations\202101081852365_AddedUserToComment.Designer.cs">
+      <DependentUpon>202101081852365_AddedUserToComment.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -245,6 +249,7 @@
     <Compile Include="Models\YearLowerThanCurrentValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\CommentsViewModel.cs" />
     <Compile Include="ViewModels\OrganizationsViewModel.cs" />
     <Compile Include="ViewModels\ProjectsAndOrganizationsViewModel.cs" />
     <Compile Include="ViewModels\ProjectsViewModel.cs" />
@@ -597,9 +602,9 @@
     <Content Include="Views\Projects\ProjectForm.cshtml" />
     <Content Include="Views\Teams\Index.cshtml" />
     <Content Include="Views\Teams\TeamForm.cshtml" />
+    <Content Include="Views\Comments\CommentForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Views\Comments\" />
     <Folder Include="Views\Controllers\" />
   </ItemGroup>
   <ItemGroup>
@@ -645,6 +650,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.resx">
       <DependentUpon>202101071336010_RemovedRequiredDataAnnotationFromReporterInTicket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101081852365_AddedUserToComment.resx">
+      <DependentUpon>202101081852365_AddedUserToComment.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
