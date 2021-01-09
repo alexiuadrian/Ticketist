@@ -30,8 +30,13 @@ namespace Ticketist.Controllers
             {
                 Projects = _context.Projects.ToList()
             };
-            
-            return View(viewModel);
+
+            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects))
+            {
+                return View("Index", viewModel);
+            }
+
+            return View("IndexReadOnly", viewModel);
         }
 
         // GET: Projects/Details/id
@@ -40,7 +45,19 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unui proiect (View separat fata de cel de editare)
 
-            return View();
+            var project= _context.Projects.SingleOrDefault(t => t.Id == Id);
+
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects))
+            {
+                return View("Details", project);
+            }
+
+            return View("DetailsReadOnly", project);
         }
 
         public ActionResult Save(Project project)
@@ -72,11 +89,12 @@ namespace Ticketist.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Projects");
+            return RedirectToAction("Details/" + project.Id, "Projects");
         }
 
         // GET: Proiect/Edit/id
         [Route("Project/Edit/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Edit(int Id)
         {
             // Editeaza un proiect (View separat fata de cel de detalii)
@@ -94,6 +112,7 @@ namespace Ticketist.Controllers
 
         // PUT: Projects/Add
         [Route("Projects/Add")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Add()
         {
             // Adauga un proiect
@@ -112,6 +131,7 @@ namespace Ticketist.Controllers
 
         // DELETE: Projects/Delete/id
         [Route("Projects/Delete/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Delete(int Id)
         {
             // Sterge un proiect

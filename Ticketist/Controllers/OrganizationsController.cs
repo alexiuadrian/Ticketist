@@ -26,13 +26,19 @@ namespace Ticketist.Controllers
         public ActionResult Index()
         {
             // Afiseaza toate organizatiile din baza de date
-
+            
             var viewModel = new OrganizationsViewModel()
             {
                 Organizations = _context.Organizations.ToList()
             };
+
+            if (User.IsInRole(RoleName.CanManageOrganizations))
+            {
+                return View("Index", viewModel);
+            }
             
-            return View(viewModel);
+            return View("IndexReadOnly", viewModel);
+
         }
 
         // GET: Organizations/Details/id
@@ -41,7 +47,20 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unei organizatii (View separat fata de cel de editare)
 
-            return View();
+            var organization = _context.Organizations.SingleOrDefault(t => t.Id == Id);
+
+            if (organization == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (User.IsInRole(RoleName.CanManageOrganizations))
+            {
+                return View("Details", organization);
+            }
+            
+            return View("DetailsReadOnly", organization);
+
         }
 
         public ActionResult Save(Organization organization)
@@ -67,11 +86,12 @@ namespace Ticketist.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Organizations");
+            return RedirectToAction("Details/" + organization.Id, "Organizations");
         }
         
         // GET: Organizations/Edit/id
         [Route("Organizations/Edit/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Edit(int Id)
         {
             // Editeaza o organizatie (View separat fata de cel de detalii)
@@ -88,6 +108,7 @@ namespace Ticketist.Controllers
 
         // PUT: Organizations/Add
         [Route("Organizations/Add")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Add()
         {
             // Adauga o organizatie
@@ -102,6 +123,7 @@ namespace Ticketist.Controllers
 
         // DELETE: Organizations/Delete/id
         [Route("Organizations/Delete/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Delete(int Id)
         {
             // Sterge o organizatie

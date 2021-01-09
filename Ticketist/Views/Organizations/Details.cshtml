@@ -1,0 +1,30 @@
+﻿@model Ticketist.Models.Organization
+@{
+    ViewBag.Title = "Details";
+}
+
+@Html.ActionLink("Edit Organization", "Edit", "Organizations", new {id = Model.Id}, new { @class = "btn btn-warning" })
+
+<div class="article-list">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Name</h2>
+            <h3 class="text-center">@Model.Name</h3>
+        </div>
+        <br />
+        <div class="intro">
+            <h3 class="name">Description</h3>
+            <p class="description">@Model.Description</p>
+        </div>
+        <div class="row articles">
+            <div class="col-sm-6 col-md-4 item">
+                <h3 class="name">Code</h3>
+                <h4 class="badge description">@Model.Code</h4>
+            </div>
+            <div class="col-sm-6 col-md-4 item">
+                <h3 class="name">Foundation Year</h3>
+                <h4 class="description">@Model.FoundationYear</h4>
+            </div>
+        </div>
+    </div>
+</div>

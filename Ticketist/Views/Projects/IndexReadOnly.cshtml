@@ -21,7 +21,6 @@ else
         <tr>
             <th>Project</th>
             <th>Start Date</th>
-            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +29,6 @@ else
             <tr>
                 <td>@Html.ActionLink(project.Name, "Details", "Projects", new {id = project.Id}, null)</td>
                 <td>@project.StartDate.ToString("dd.MM.yyyy")</td>
-                <td>@Html.ActionLink("Delete", "Delete", "Projects", new {id = project.Id}, new {@class = "btn btn-danger"})</td>
             </tr>
         }
         </tbody>

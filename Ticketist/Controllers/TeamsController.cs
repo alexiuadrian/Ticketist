@@ -30,8 +30,13 @@ namespace Ticketist.Controllers
             {
                 Teams = _context.Teams.ToList()
             };
-            
-            return View(viewModel);
+
+            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects) || User.IsInRole(RoleName.CanManageTeams))
+            {
+                return View("Index", viewModel);
+            }
+
+            return View("IndexReadOnly", viewModel);
         }
 
         public ActionResult Save(Team team)
@@ -61,7 +66,7 @@ namespace Ticketist.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Teams");
+            return RedirectToAction("Details/" + team.Id, "Teams");
         }
 
         // GET: Teams/Details/id
@@ -70,11 +75,24 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unei echipe (View separat fata de cel de editare)
 
-            return View();
+            var team = _context.Teams.SingleOrDefault(t => t.Id == Id);
+
+            if (team == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects) || User.IsInRole(RoleName.CanManageTeams))
+            {
+                return View("Details", team);
+            }
+
+            return View("DetailsReadOnly", team);
         }
 
         // GET: Teams/Edit/id
         [Route("Teams/Edit/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Edit(int Id)
         {
             // Editeaza o echipa (View separat fata de cel de detalii)
@@ -92,6 +110,7 @@ namespace Ticketist.Controllers
 
         // PUT: Teams/Add
         [Route("Teams/Add")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Add()
         {
             // Adauga o echipa
@@ -107,6 +126,7 @@ namespace Ticketist.Controllers
 
         // DELETE: Teams/Delete/id
         [Route("Teams/Delete/{Id}")]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Delete(int Id)
         {
             // Sterge o echipa

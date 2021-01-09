@@ -46,7 +46,7 @@ else
 {
     foreach (var comment in Model.Comments)
     {
-        <h4>@comment.User at @comment.CreationDate</h4>
+        <h5>@comment.User at @comment.CreationDate</h5>
         <div>
             <br />
             <h4>@comment.Description</h4>
@@ -54,10 +54,10 @@ else
             <br />
         </div>
 
-        @Html.ActionLink("Edit Comment", "Edit", "Comments", new { id = comment.Id }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Edit", "Edit", "Comments", new { id = comment.Id }, new { @class = "btn btn-warning" })
         <br/>
         <br/>
-        @Html.ActionLink("Delete Comment", "Delete", "Comments", new { id = comment.Id }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("Delete", "Delete", "Comments", new { id = comment.Id }, new { @class = "btn btn-danger" })
         <br/>
         <hr/>
     }

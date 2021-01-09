@@ -42,9 +42,13 @@ else
                             {
                                 <td class="bg-success text-center"><span class="text-wrap">@status.Name</span></td>
                             }
-                            else
+                            else if(status.Name.Contains("IN PROGRESS"))
                             {
                                 <td class="bg-warning text-center"><span class="text-wrap">@status.Name</span></td>
+                            }
+                            else if (status.Name.Contains("SUSPENDED"))
+                            {
+                                <td class="bg-info text-center"><span class="text-wrap">@status.Name</span></td>
                             }
                         }
                     }

@@ -6,10 +6,6 @@
 
 <h2>Organizations</h2>
 
-@Html.ActionLink("New Organization", "Add", "Organizations", null, new { @class = "btn btn-primary" })
-<br>
-<br />
-
 @if (Model.Organizations.Count() == 0)
 {
     <text>There are no organizations.</text>
@@ -21,7 +17,6 @@ else
         <tr>
             <th>Organization</th>
             <th>Code</th>
-            <th>Delete</th>
         </tr>
         </thead>
         <tbody>
@@ -30,7 +25,6 @@ else
             <tr>
                 <td>@Html.ActionLink(organization.Name, "Details", "Organizations", new {id = organization.Id}, null)</td>
                 <td>@organization.Code</td>
-                <td>@Html.ActionLink("Delete", "Delete", "Organizations", new {id = organization.Id}, new {@class = "btn btn-danger"})</td>
             </tr>
         }
         </tbody>
