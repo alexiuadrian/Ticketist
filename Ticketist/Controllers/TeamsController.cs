@@ -92,7 +92,7 @@ namespace Ticketist.Controllers
 
         // GET: Teams/Edit/id
         [Route("Teams/Edit/{Id}")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageTeams)]
         public ActionResult Edit(int Id)
         {
             // Editeaza o echipa (View separat fata de cel de detalii)
@@ -110,7 +110,7 @@ namespace Ticketist.Controllers
 
         // PUT: Teams/Add
         [Route("Teams/Add")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageTeams)]
         public ActionResult Add()
         {
             // Adauga o echipa
@@ -126,7 +126,7 @@ namespace Ticketist.Controllers
 
         // DELETE: Teams/Delete/id
         [Route("Teams/Delete/{Id}")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageTeams)]
         public ActionResult Delete(int Id)
         {
             // Sterge o echipa

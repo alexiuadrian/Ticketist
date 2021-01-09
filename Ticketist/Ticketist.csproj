@@ -243,6 +243,22 @@
     <Compile Include="Migrations\202101090943021_SeedUsers.Designer.cs">
       <DependentUpon>202101090943021_SeedUsers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101091047344_AddedTeamIdToUser.cs" />
+    <Compile Include="Migrations\202101091047344_AddedTeamIdToUser.Designer.cs">
+      <DependentUpon>202101091047344_AddedTeamIdToUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101091603446_AddedUserTeamsRemovedTeamIdFromUser.cs" />
+    <Compile Include="Migrations\202101091603446_AddedUserTeamsRemovedTeamIdFromUser.Designer.cs">
+      <DependentUpon>202101091603446_AddedUserTeamsRemovedTeamIdFromUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101091608417_ChangedUserTeamsIdToInt.cs" />
+    <Compile Include="Migrations\202101091608417_ChangedUserTeamsIdToInt.Designer.cs">
+      <DependentUpon>202101091608417_ChangedUserTeamsIdToInt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101091609522_SeedForUserTeams.cs" />
+    <Compile Include="Migrations\202101091609522_SeedForUserTeams.Designer.cs">
+      <DependentUpon>202101091609522_SeedForUserTeams.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
@@ -266,6 +282,7 @@
     <Compile Include="ViewModels\TeamsViewModel.cs" />
     <Compile Include="ViewModels\TicketAndReporterAndProjectAndStatusViewModel.cs" />
     <Compile Include="ViewModels\TicketsViewModel.cs" />
+    <Compile Include="Models\UserTeams.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-Ticketist-20210105103010.mdf" />
@@ -677,6 +694,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101090943021_SeedUsers.resx">
       <DependentUpon>202101090943021_SeedUsers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091047344_AddedTeamIdToUser.resx">
+      <DependentUpon>202101091047344_AddedTeamIdToUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091603446_AddedUserTeamsRemovedTeamIdFromUser.resx">
+      <DependentUpon>202101091603446_AddedUserTeamsRemovedTeamIdFromUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091608417_ChangedUserTeamsIdToInt.resx">
+      <DependentUpon>202101091608417_ChangedUserTeamsIdToInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091609522_SeedForUserTeams.resx">
+      <DependentUpon>202101091609522_SeedForUserTeams.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

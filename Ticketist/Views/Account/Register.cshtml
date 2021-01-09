@@ -1,4 +1,5 @@
-﻿@model Ticketist.Models.RegisterViewModel
+﻿@using Ticketist.Models
+@model Ticketist.Models.RegisterViewModel
 @{
     ViewBag.Title = "Register";
 }
@@ -28,6 +29,16 @@
         <div class="col-md-10">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.TeamId)
+        @Html.DropDownListFor(m => m.TeamId, new SelectList(Model.Teams, "Id", "Name"), "Select Team", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.TeamId)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.RoleName)
+        @Html.DropDownListFor(m => m.RoleName, new SelectList(Model.RoleNames), "Select Role", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.RoleName)
     </div>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">

@@ -6,10 +6,6 @@
 
 <h2>Projects</h2>
 
-@Html.ActionLink("New Project", "Add", "Projects", null, new { @class = "btn btn-primary" })
-<br>
-<br />
-
 @if (Model.Projects.Count() == 0)
 {
     <text>There are no projects.</text>

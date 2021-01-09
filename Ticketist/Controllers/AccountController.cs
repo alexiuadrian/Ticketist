@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -18,9 +19,11 @@ namespace Ticketist.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _context;
 
         public AccountController()
         {
+            _context = new ApplicationDbContext();
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
@@ -56,6 +59,9 @@ namespace Ticketist.Controllers
         //
         // GET: /Account/Login
         [AllowAnonymous]
+        [Authorize(Roles = RoleName.CanManageProjects)]
+        [Authorize(Roles = RoleName.CanManageTeams)]
+        [Authorize(Roles = RoleName.CanManageTickets)]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
@@ -66,6 +72,9 @@ namespace Ticketist.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
+        [Authorize(Roles = RoleName.CanManageProjects)]
+        [Authorize(Roles = RoleName.CanManageTeams)]
+        [Authorize(Roles = RoleName.CanManageTickets)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
@@ -137,25 +146,50 @@ namespace Ticketist.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         public ActionResult Register()
         {
-            return View();
+            List<string> roleNames = new List<string>();
+            
+            roleNames.Add(RoleName.CanManageOrganizations);
+            roleNames.Add(RoleName.CanManageProjects);
+            roleNames.Add(RoleName.CanManageTeams);
+            roleNames.Add(RoleName.CanManageTickets);
+            
+            var viewModel = new RegisterViewModel()
+            {
+                Teams = _context.Teams.ToList(),
+                RoleNames = roleNames
+            };
+            
+            return View(viewModel);
         }
 
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email
+                };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await UserManager.AddToRoleAsync(user.Id, model.RoleName);
+
+                   // var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
+                   // var roleManager = new RoleManager<IdentityRole>(roleStore);
+                   // await roleManager.CreateAsync(new IdentityRole("CanManageProjects"));
+                   // await roleManager.CreateAsync(new IdentityRole("CanManageTeams"));
+                   // await roleManager.CreateAsync(new IdentityRole("CanManageTickets"));
+
                     // await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -169,6 +203,8 @@ namespace Ticketist.Controllers
                 AddErrors(result);
             }
 
+            // _context.Roles.Add();
+            
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -422,6 +458,8 @@ namespace Ticketist.Controllers
             }
 
             base.Dispose(disposing);
+
+            _context.Dispose();
         }
 
         #region Helpers

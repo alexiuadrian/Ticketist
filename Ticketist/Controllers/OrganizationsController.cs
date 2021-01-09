@@ -19,7 +19,7 @@ namespace Ticketist.Controllers
         }
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose();
+            _context.Dispose(); List<string> hellos = new List<string>();
         }
         
         // GET: Organization
@@ -36,7 +36,7 @@ namespace Ticketist.Controllers
             {
                 return View("Index", viewModel);
             }
-            
+
             return View("IndexReadOnly", viewModel);
 
         }

@@ -1,8 +1,10 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Ticketist.ViewModels;
 
 namespace Ticketist.Models
 {
@@ -26,6 +28,7 @@ namespace Ticketist.Models
         public DbSet<Ticket> Tickets { get; set; }
         public DbSet<Status> Statuses { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<UserTeams> UserTeams { get; set; }
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

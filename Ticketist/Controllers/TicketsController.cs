@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -28,13 +29,62 @@ namespace Ticketist.Controllers
         {
             // Afiseaza toate tichetele din baza de date
 
-            var viewModel = new TicketsViewModel()
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
             {
-                Tickets = _context.Tickets.ToList(),
-                Statuses = _context.Statuses.ToList()
-            };
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }   
             
-            return View(viewModel);
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
+            List<Ticket> tickets = new List<Ticket>();
+
+            foreach (var ticket in _context.Tickets.ToList())
+            {
+                foreach (var project in projects)
+                {
+                    if (ticket.ProjectId == project.Id)
+                    {
+                        tickets.Add(ticket);
+                    }
+                }
+            }
+
+            var viewModel = new TicketsViewModel()
+                {
+                    Tickets = tickets,
+                    Statuses = _context.Statuses.ToList()
+                };
+                
+            return View("Index", viewModel);
         }
 
         // GET: Tickets/Details/id
@@ -77,12 +127,48 @@ namespace Ticketist.Controllers
         {
             // Editeaza un tichet (View separat fata de cel de detalii)
 
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
             var ticket = _context.Tickets.SingleOrDefault(t => t.Id == Id);
 
             var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
             {
                 Ticket = ticket,
-                Projects = _context.Projects.ToList(),
+                Projects = projects,
                 Statuses = _context.Statuses.ToList()
             };
 
@@ -94,7 +180,43 @@ namespace Ticketist.Controllers
         public ActionResult Add()
         {
             // Adauga un tichet
-            
+
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
             var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
             {
                 Ticket = new Ticket()
@@ -102,7 +224,7 @@ namespace Ticketist.Controllers
                     CreationDate = DateTime.Now,
                     Reporter = User.Identity.Name
                 },
-                Projects = _context.Projects.ToList(),
+                Projects = projects,
                 Statuses = _context.Statuses.ToList()
             };
 
@@ -113,12 +235,48 @@ namespace Ticketist.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Save(Ticket ticket)
         {
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
                 {
                     Ticket = ticket,
-                    Projects = _context.Projects.ToList(),
+                    Projects = projects,
                     Statuses = _context.Statuses.ToList()
                 };
                 return View("TicketsForm", viewModel);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Data.Entity;
 
 namespace Ticketist.Models
 {
@@ -79,6 +80,18 @@ namespace Ticketist.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Team")]
+        public int TeamId { get; set; }
+        
+        public IEnumerable<Team> Teams { get; set; }
+
+        [Required]
+        [Display(Name = "Role")]
+        public string RoleName { get; set; }
+
+        public IEnumerable<string> RoleNames { get; set; }
     }
 
     public class ResetPasswordViewModel

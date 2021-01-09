@@ -94,7 +94,7 @@ namespace Ticketist.Controllers
 
         // GET: Proiect/Edit/id
         [Route("Project/Edit/{Id}")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageProjects)]
         public ActionResult Edit(int Id)
         {
             // Editeaza un proiect (View separat fata de cel de detalii)
@@ -112,7 +112,7 @@ namespace Ticketist.Controllers
 
         // PUT: Projects/Add
         [Route("Projects/Add")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageProjects)]
         public ActionResult Add()
         {
             // Adauga un proiect
@@ -131,7 +131,7 @@ namespace Ticketist.Controllers
 
         // DELETE: Projects/Delete/id
         [Route("Projects/Delete/{Id}")]
-        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        [Authorize(Roles = RoleName.CanManageProjects)]
         public ActionResult Delete(int Id)
         {
             // Sterge un proiect
