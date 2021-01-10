@@ -1,0 +1,65 @@
+﻿@model Ticketist.ViewModels.UsersAndRolesViewModel
+
+@{
+    ViewBag.Title = "Edit Roles";
+}
+
+<h2>Edit Roles</h2>
+
+
+@if (!Model.Users.Any())
+{
+    <text>There are no users.</text>
+}
+else
+{
+    <table id="users" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Role</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model.Users)
+            {
+            <tr>
+                <td>@user.UserName</td>
+                <td>
+                    @foreach (var role in user.Roles.ToList())
+                    {
+                        if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd24f"))
+                        {
+                            <p>Can Manage Organizations</p>
+                        }
+                        else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd245"))
+                        {
+                            <p>Can Manage Projects</p>
+                        }
+                        else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd246"))
+                        {
+                            <p>Can Manage Teams</p>
+                        }
+                        else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd247"))
+                        {
+                            <p>Can Manage Tickets</p>
+                        }
+                    }
+                    @Html.ActionLink("Add Role", "EditRoles", "Account", new { id = user.Id }, new { @class = "btn btn-success" })
+                </td>
+                <td>@Html.ActionLink("Delete", "Delete", "Account", new { id = user.Id }, new { @class = "btn btn-danger" })</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#users").DataTable();
+        });
+    </script>
+}

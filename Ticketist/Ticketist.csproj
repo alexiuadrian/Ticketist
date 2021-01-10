@@ -259,9 +259,18 @@
     <Compile Include="Migrations\202101091609522_SeedForUserTeams.Designer.cs">
       <DependentUpon>202101091609522_SeedForUserTeams.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101091825505_AddedUserProjects.cs" />
+    <Compile Include="Migrations\202101091825505_AddedUserProjects.Designer.cs">
+      <DependentUpon>202101091825505_AddedUserProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202101091827331_AddedUserOrganizations.cs" />
+    <Compile Include="Migrations\202101091827331_AddedUserOrganizations.Designer.cs">
+      <DependentUpon>202101091827331_AddedUserOrganizations.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Comment.cs" />
+    <Compile Include="Models\DifferentCodeValidation.cs" />
     <Compile Include="Models\EndDateLowerThanStartDateValidation.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -271,6 +280,8 @@
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\Ticket.cs" />
+    <Compile Include="Models\UserOrganizations.cs" />
+    <Compile Include="Models\UserProjects.cs" />
     <Compile Include="Models\YearLowerThanCurrentValidation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -278,11 +289,14 @@
     <Compile Include="ViewModels\OrganizationsViewModel.cs" />
     <Compile Include="ViewModels\ProjectsAndOrganizationsViewModel.cs" />
     <Compile Include="ViewModels\ProjectsViewModel.cs" />
+    <Compile Include="ViewModels\RolesBooleanViewModel.cs" />
     <Compile Include="ViewModels\TeamAndProjectsViewModel.cs" />
+    <Compile Include="ViewModels\TeamsAndProjectsAndOrganizationsViewModel.cs" />
     <Compile Include="ViewModels\TeamsViewModel.cs" />
     <Compile Include="ViewModels\TicketAndReporterAndProjectAndStatusViewModel.cs" />
     <Compile Include="ViewModels\TicketsViewModel.cs" />
     <Compile Include="Models\UserTeams.cs" />
+    <Compile Include="ViewModels\UsersAndRolesViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\aspnet-Ticketist-20210105103010.mdf" />
@@ -638,6 +652,10 @@
     <Content Include="Views\Teams\Details.cshtml" />
     <Content Include="Views\Teams\DetailsReadOnly.cshtml" />
     <Content Include="Views\Teams\IndexReadOnly.cshtml" />
+    <Content Include="Views\Home\IndexAdmin.cshtml" />
+    <Content Include="Views\Account\EditUser.cshtml" />
+    <Content Include="Views\Account\EditRoles.cshtml" />
+    <Content Include="Views\Home\IndexLoggedIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Controllers\" />
@@ -706,6 +724,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101091609522_SeedForUserTeams.resx">
       <DependentUpon>202101091609522_SeedForUserTeams.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091825505_AddedUserProjects.resx">
+      <DependentUpon>202101091825505_AddedUserProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101091827331_AddedUserOrganizations.resx">
+      <DependentUpon>202101091827331_AddedUserOrganizations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

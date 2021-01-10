@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Ticketist.Models;
 using Ticketist.ViewModels;
 
@@ -25,10 +26,23 @@ namespace Ticketist.Controllers
         public ActionResult Index()
         {
             // Afiseaza toate proiectele din baza de date
+            
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
 
             var viewModel = new ProjectsViewModel()
             {
-                Projects = _context.Projects.ToList()
+                Projects = projects
             };
 
             if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects))
@@ -44,9 +58,22 @@ namespace Ticketist.Controllers
         public ActionResult Details(int Id)
         {
             // Vezi detaliile unui proiect (View separat fata de cel de editare)
+            
+            List<Project> projects = new List<Project>();
 
-            var project= _context.Projects.SingleOrDefault(t => t.Id == Id);
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
 
+            var project = projects.SingleOrDefault(p => p.Id == Id);
+            
             if (project == null)
             {
                 return HttpNotFound();
@@ -62,12 +89,38 @@ namespace Ticketist.Controllers
 
         public ActionResult Save(Project project)
         {
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var organization in _context.Organizations.ToList())
+            {
+                foreach (var project1 in projects)
+                {
+                    if (organization.Id == project1.OrganizationId)
+                    {
+                        organizations.Add(organization);
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 var viewModel = new ProjectsAndOrganizationsViewModel()
                 {
                     Project = project,
-                    Organizations = _context.Organizations.ToList()
+                    Organizations = organizations
                 };
                 return View("ProjectForm", viewModel);
             }
@@ -75,6 +128,23 @@ namespace Ticketist.Controllers
             if (project.Id == 0)
             {
                 _context.Projects.Add(project);
+
+                _context.SaveChanges();
+
+                Project lastProject = new Project();
+
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    lastProject = project1;
+                }
+
+                _context.UserProjects.Add(new UserProjects()
+                {
+                    UserId = User.Identity.GetUserId(),
+                    ProjectId = lastProject.Id
+                });
+
+                _context.SaveChanges();
             }
             else
             {
@@ -85,9 +155,9 @@ namespace Ticketist.Controllers
                 projectInDb.StartDate = project.StartDate;
                 projectInDb.EndDate = project.EndDate;
                 projectInDb.OrganizationId = project.OrganizationId;
-            }
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Details/" + project.Id, "Projects");
         }
@@ -98,13 +168,39 @@ namespace Ticketist.Controllers
         public ActionResult Edit(int Id)
         {
             // Editeaza un proiect (View separat fata de cel de detalii)
+            
+            List<Project> projects = new List<Project>();
 
-            var project = _context.Projects.SingleOrDefault(o => o.Id == Id);
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var organization in _context.Organizations.ToList())
+            {
+                foreach (var project1 in projects)
+                {
+                    if (organization.Id == project1.OrganizationId)
+                    {
+                        organizations.Add(organization);
+                    }
+                }
+            }
+
+            var project = projects.SingleOrDefault(o => o.Id == Id);
 
             var viewModel = new ProjectsAndOrganizationsViewModel()
             {
                 Project = project,
-                Organizations = _context.Organizations.ToList()
+                Organizations = organizations
             };
             
             return View("ProjectForm", viewModel);
@@ -116,6 +212,32 @@ namespace Ticketist.Controllers
         public ActionResult Add()
         {
             // Adauga un proiect
+            
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var organization in _context.Organizations.ToList())
+            {
+                foreach (var project1 in projects)
+                {
+                    if (organization.Id == project1.OrganizationId)
+                    {
+                        organizations.Add(organization);
+                    }
+                }
+            }
 
             var viewModel = new ProjectsAndOrganizationsViewModel()
             {
@@ -123,7 +245,7 @@ namespace Ticketist.Controllers
                 {
                     StartDate = DateTime.Today
                 },
-                Organizations = _context.Organizations.ToList()
+                Organizations = organizations
             };
             
             return View("ProjectForm", viewModel);
@@ -135,15 +257,35 @@ namespace Ticketist.Controllers
         public ActionResult Delete(int Id)
         {
             // Sterge un proiect
+            
+            List<Project> projects = new List<Project>();
 
-            var project = _context.Projects.SingleOrDefault(o => o.Id == Id);
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+            
+            var projectToDelete = projects.SingleOrDefault(o => o.Id == Id);
 
-            if (project == null)
+            if (projectToDelete == null)
             {
                 return HttpNotFound();
             }
 
-            _context.Projects.Remove(project);
+            var userId = User.Identity.GetUserId();
+
+            var x = _context.UserProjects.SingleOrDefault(uo =>
+                uo.UserId == userId && uo.ProjectId == projectToDelete.Id);
+
+            _context.UserProjects.Remove(x);
+
+            _context.Projects.Remove(projectToDelete);
 
             _context.SaveChanges();
 

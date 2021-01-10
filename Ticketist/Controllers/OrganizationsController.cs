@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Ticketist.Models;
 using Ticketist.ViewModels;
 
@@ -19,17 +20,30 @@ namespace Ticketist.Controllers
         }
         protected override void Dispose(bool disposing)
         {
-            _context.Dispose(); List<string> hellos = new List<string>();
+            _context.Dispose();
         }
         
         // GET: Organization
         public ActionResult Index()
         {
             // Afiseaza toate organizatiile din baza de date
-            
+
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    if (userOrganization.UserId == User.Identity.GetUserId() && organization1.Id == userOrganization.OrganizationId)
+                    {
+                        organizations.Add(organization1);
+                    }
+                }
+            }
+
             var viewModel = new OrganizationsViewModel()
             {
-                Organizations = _context.Organizations.ToList()
+                Organizations = organizations
             };
 
             if (User.IsInRole(RoleName.CanManageOrganizations))
@@ -47,7 +61,20 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unei organizatii (View separat fata de cel de editare)
 
-            var organization = _context.Organizations.SingleOrDefault(t => t.Id == Id);
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    if (userOrganization.UserId == User.Identity.GetUserId() && organization1.Id == userOrganization.OrganizationId)
+                    {
+                        organizations.Add(organization1);
+                    }
+                }
+            }
+
+            var organization = organizations.SingleOrDefault(t => t.Id == Id);
 
             if (organization == null)
             {
@@ -73,6 +100,23 @@ namespace Ticketist.Controllers
             if (organization.Id == 0)
             {
                 _context.Organizations.Add(organization);
+
+                _context.SaveChanges();
+
+                Organization lastOrganization = new Organization();
+
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    lastOrganization = organization1;
+                }
+
+                _context.UserOrganizations.Add(new UserOrganizations()
+                {
+                    UserId = User.Identity.GetUserId(),
+                    OrganizationId = lastOrganization.Id
+                });
+
+                _context.SaveChanges();
             }
             else
             {
@@ -82,9 +126,9 @@ namespace Ticketist.Controllers
                 organizationInDb.Code = organization.Code;
                 organizationInDb.Description = organization.Description;
                 organizationInDb.FoundationYear = organization.FoundationYear;
-            }
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Details/" + organization.Id, "Organizations");
         }
@@ -96,7 +140,20 @@ namespace Ticketist.Controllers
         {
             // Editeaza o organizatie (View separat fata de cel de detalii)
 
-            var organization = _context.Organizations.SingleOrDefault(o => o.Id == Id);
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    if (userOrganization.UserId == User.Identity.GetUserId() && organization1.Id == userOrganization.OrganizationId)
+                    {
+                        organizations.Add(organization1);
+                    }
+                }
+            }
+
+            var organization = organizations.SingleOrDefault(o => o.Id == Id);
 
             if (organization == null)
             {
@@ -128,12 +185,32 @@ namespace Ticketist.Controllers
         {
             // Sterge o organizatie
 
-            var organization = _context.Organizations.SingleOrDefault(o => o.Id == Id);
+            List<Organization> organizations = new List<Organization>();
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    if (userOrganization.UserId == User.Identity.GetUserId() && organization1.Id == userOrganization.OrganizationId)
+                    {
+                        organizations.Add(organization1);
+                    }
+                }
+            }
+
+            var organization = organizations.SingleOrDefault(o => o.Id == Id);
 
             if (organization == null)
             {
                 return HttpNotFound();
             }
+
+            var userId = User.Identity.GetUserId();
+
+            var org = _context.UserOrganizations.SingleOrDefault(uo =>
+                uo.UserId == userId && uo.OrganizationId == organization.Id);
+
+            _context.UserOrganizations.Remove(org);
 
             _context.Organizations.Remove(organization);
 

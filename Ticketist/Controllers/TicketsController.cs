@@ -93,9 +93,60 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unui tichet (View separat fata de cel de editare)
 
-            var ticket = _context.Tickets.SingleOrDefault(t => t.Id == Id);
+            List<UserTeams> userTeams = new List<UserTeams>();
 
-            if (ticket == null)
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
+            List<Ticket> tickets = new List<Ticket>();
+
+            foreach (var ticket in _context.Tickets.ToList())
+            {
+                foreach (var project in projects)
+                {
+                    if (ticket.ProjectId == project.Id)
+                    {
+                        tickets.Add(ticket);
+                    }
+                }
+            }
+
+            // var ticket = _context.Tickets.SingleOrDefault(t => t.Id == Id);
+
+            var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
+
+            if (ticket1 == null)
             {
                 return HttpNotFound();
             }
@@ -112,8 +163,8 @@ namespace Ticketist.Controllers
 
             var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
             {
-                Ticket = ticket,
-                Projects = _context.Projects.ToList(),
+                Ticket = ticket1,
+                Projects = projects,
                 Statuses = _context.Statuses.ToList(),
                 Comments = comments
             };
@@ -163,11 +214,26 @@ namespace Ticketist.Controllers
                 }
             }
 
-            var ticket = _context.Tickets.SingleOrDefault(t => t.Id == Id);
+            List<Ticket> tickets = new List<Ticket>();
+
+            foreach (var ticket in _context.Tickets.ToList())
+            {
+                foreach (var project in projects)
+                {
+                    if (ticket.ProjectId == project.Id)
+                    {
+                        tickets.Add(ticket);
+                    }
+                }
+            }
+
+            // var ticket1 = _context.Tickets.SingleOrDefault(t => t.Id == Id);
+
+            var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
 
             var viewModel = new TicketAndReporterAndProjectAndStatusViewModel()
             {
-                Ticket = ticket,
+                Ticket = ticket1,
                 Projects = projects,
                 Statuses = _context.Statuses.ToList()
             };
@@ -315,14 +381,65 @@ namespace Ticketist.Controllers
         {
             // Sterge un tichet
 
-            var ticket = _context.Tickets.SingleOrDefault(o => o.Id == Id);
+            List<UserTeams> userTeams = new List<UserTeams>();
 
-            if (ticket == null)
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team in teams)
+                {
+                    if (project.Id == team.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
+            List<Ticket> tickets = new List<Ticket>();
+
+            foreach (var ticket in _context.Tickets.ToList())
+            {
+                foreach (var project in projects)
+                {
+                    if (ticket.ProjectId == project.Id)
+                    {
+                        tickets.Add(ticket);
+                    }
+                }
+            }
+
+            // var ticket1 = _context.Tickets.SingleOrDefault(o => o.Id == Id);
+
+            var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
+
+            if (ticket1 == null)
             {
                 return HttpNotFound();
             }
 
-            _context.Tickets.Remove(ticket);
+            _context.Tickets.Remove(ticket1);
 
             _context.SaveChanges();
 

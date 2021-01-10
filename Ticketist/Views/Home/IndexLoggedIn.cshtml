@@ -1,0 +1,63 @@
+﻿@model Ticketist.ViewModels.TeamsAndProjectsAndOrganizationsViewModel
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="projects-horizontal">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Hello</h2>
+            <p class="text-center">Welcome to <b>Ticketist</b>, below is some information about you and your work place</p>
+        </div>
+        <div class="row projects">
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Organization</h3>
+                        <ul>
+                            @foreach (var organization in Model.Organizations)
+                            {
+                                <li class="description">@organization.Name</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Project</h3>
+                        <ul>
+                            @foreach (var project in Model.Projects)
+                            {
+                                <li class="description">@project.Name</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Team</h3>
+                        <ul>
+                            @foreach (var team in Model.Teams)
+                            {
+                                <li class="description">@team.Name</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Number of tickets reported by you</h3>
+                        <p class="description">@Model.nrOfTickets</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

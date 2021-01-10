@@ -15,6 +15,7 @@ namespace Ticketist.Models
 
         [Required]
         [StringLength(3)]
+        [DifferentCodeValidation]
         public string Code { get; set; }
 
         [Required]

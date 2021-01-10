@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using Ticketist.Models;
 using Ticketist.ViewModels;
 
@@ -26,9 +27,32 @@ namespace Ticketist.Controllers
         {
             // Afiseaza toate echipele din baza de date
 
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team.Id)
+                    {
+                        teams.Add(team);
+                    }
+                }
+            }
+
             var viewModel = new TeamsViewModel()
             {
-                Teams = _context.Teams.ToList()
+                Teams = teams
             };
 
             if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects) || User.IsInRole(RoleName.CanManageTeams))
@@ -41,12 +65,39 @@ namespace Ticketist.Controllers
 
         public ActionResult Save(Team team)
         {
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                foreach (var team1 in _context.Teams.ToList())
+                {
+                    if (userTeam.UserId == User.Identity.GetUserId() && team1.Id == userTeam.TeamId)
+                    {
+                        teams.Add(team1);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 var viewModel = new TeamAndProjectsViewModel()
                 {
                     Team = team,
-                    Projects = _context.Projects.ToList()
+                    Projects = projects
                 };
                 return View("TeamForm", viewModel);
             }
@@ -54,6 +105,23 @@ namespace Ticketist.Controllers
             if (team.Id == 0)
             {
                 _context.Teams.Add(team);
+
+                _context.SaveChanges();
+
+                Team lastTeam = new Team();
+
+                foreach (var team1 in _context.Teams.ToList())
+                {
+                    lastTeam = team1;
+                }
+
+                _context.UserTeams.Add(new UserTeams()
+                {
+                    UserId = User.Identity.GetUserId(),
+                    TeamId = lastTeam.Id
+                });
+
+                _context.SaveChanges();
             }
             else
             {
@@ -62,9 +130,9 @@ namespace Ticketist.Controllers
                 teamInDb.Name = team.Name;
                 teamInDb.Code = team.Code;
                 teamInDb.ProjectId = team.ProjectId;
-            }
 
-            _context.SaveChanges();
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Details/" + team.Id, "Teams");
         }
@@ -75,7 +143,20 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unei echipe (View separat fata de cel de editare)
 
-            var team = _context.Teams.SingleOrDefault(t => t.Id == Id);
+            List<Team> teams = new List<Team>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                foreach (var team1 in _context.Teams.ToList())
+                {
+                    if (userTeam.UserId == User.Identity.GetUserId() && team1.Id == userTeam.TeamId)
+                    {
+                        teams.Add(team1);
+                    }
+                }
+            }
+
+            var team = teams.SingleOrDefault(t => t.Id == Id);
 
             if (team == null)
             {
@@ -97,12 +178,50 @@ namespace Ticketist.Controllers
         {
             // Editeaza o echipa (View separat fata de cel de detalii)
 
-            var team = _context.Teams.SingleOrDefault(t => t.Id == Id);
+            List<UserTeams> userTeams = new List<UserTeams>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == User.Identity.GetUserId())
+                {
+                    userTeams.Add(userTeam);
+                }
+            }
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var team1 in _context.Teams.ToList())
+            {
+                foreach (var userTeam in userTeams)
+                {
+                    if (userTeam.TeamId == team1.Id)
+                    {
+                        teams.Add(team1);
+                    }
+                }
+            }
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var project in _context.Projects.ToList())
+            {
+                foreach (var team1 in teams)
+                {
+                    if (project.Id == team1.ProjectId)
+                    {
+                        projects.Add(project);
+                    }
+                }
+            }
+
+            // var team = _context.Teams.SingleOrDefault(t => t.Id == Id);
+
+            var team = teams.SingleOrDefault(t => t.Id == Id);
 
             var viewModel = new TeamAndProjectsViewModel()
             {
                 Team = team,
-                Projects = _context.Projects.ToList()
+                Projects = projects
             };
             
             return View("TeamForm", viewModel);
@@ -115,10 +234,23 @@ namespace Ticketist.Controllers
         {
             // Adauga o echipa
 
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
             var viewModel = new TeamAndProjectsViewModel()
             {
                 Team = new Team(),
-                Projects = _context.Projects.ToList()
+                Projects = projects
             };
             
             return View("TeamForm", viewModel);
@@ -130,13 +262,33 @@ namespace Ticketist.Controllers
         public ActionResult Delete(int Id)
         {
             // Sterge o echipa
-            
-            var team = _context.Teams.SingleOrDefault(o => o.Id == Id);
+
+            List<Team> teams = new List<Team>();
+
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                foreach (var team1 in _context.Teams.ToList())
+                {
+                    if (userTeam.UserId == User.Identity.GetUserId() && team1.Id == userTeam.TeamId)
+                    {
+                        teams.Add(team1);
+                    }
+                }
+            }
+
+            var team = teams.SingleOrDefault(o => o.Id == Id);
 
             if (team == null)
             {
                 return HttpNotFound();
             }
+
+            var userId = User.Identity.GetUserId();
+
+            var x = _context.UserTeams.SingleOrDefault(uo =>
+                uo.UserId == userId && uo.TeamId == team.Id);
+
+            _context.UserTeams.Remove(x);
 
             _context.Teams.Remove(team);
 

@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="projects-horizontal">
+    <div class="container">
+        <div class="intro">
+            <h2 class="text-center">Hello</h2>
+            <p class="text-center">Welcome to <b>Ticketist</b>, below are some actions you can perform as an Administrator</p>
+        </div>
+        <div class="row projects">
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Add a New User</h3>
+                        <br/>
+                        @Html.ActionLink("Register a new user", "Register", "Account", null, new {@class = "btn btn-info"})
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 item">
+                <div class="row">
+                    <div class="col">
+                        <h3 class="name">Modify Current User Roles</h3>
+                        <br/>
+                        @Html.ActionLink("Modify Roles", "EditUser", "Account", null, new { @class = "btn btn-info" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

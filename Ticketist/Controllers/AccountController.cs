@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -11,6 +12,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Ticketist.Models;
+using Ticketist.ViewModels;
 
 namespace Ticketist.Controllers
 {
@@ -183,13 +185,7 @@ namespace Ticketist.Controllers
                 if (result.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(user.Id, model.RoleName);
-
-                   // var roleStore = new RoleStore<IdentityRole>(new ApplicationDbContext());
-                   // var roleManager = new RoleManager<IdentityRole>(roleStore);
-                   // await roleManager.CreateAsync(new IdentityRole("CanManageProjects"));
-                   // await roleManager.CreateAsync(new IdentityRole("CanManageTeams"));
-                   // await roleManager.CreateAsync(new IdentityRole("CanManageTickets"));
-
+                    
                     // await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
                     
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
@@ -440,6 +436,176 @@ namespace Ticketist.Controllers
             return View();
         }
 
+        [Authorize(Roles = RoleName.CanManageOrganizations)]
+        public ActionResult EditUser()
+        {
+            List<string> roleNames = new List<string>();
+
+            roleNames.Add(RoleName.CanManageOrganizations);
+            roleNames.Add(RoleName.CanManageProjects);
+            roleNames.Add(RoleName.CanManageTeams);
+            roleNames.Add(RoleName.CanManageTickets);
+
+            var viewModel = new UsersAndRolesViewModel()
+            {
+                Users = _context.Users.ToList(),
+                Roles = roleNames
+            };
+
+            return View(viewModel);
+        }
+        
+        public ActionResult Delete(string Id)
+        {
+            foreach (var userTeam in _context.UserTeams.ToList())
+            {
+                if (userTeam.UserId == Id)
+                {
+                    _context.UserTeams.Remove(userTeam);
+                }
+            }
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                if (userProject.UserId == Id)
+                {
+                    _context.UserProjects.Remove(userProject);
+                }
+            }
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                if (userOrganization.UserId == Id)
+                {
+                    _context.UserOrganizations.Remove(userOrganization);
+                }   
+            }
+
+            var userToDelete = _context.Users.SingleOrDefault(u => u.Id == Id);
+
+            if (userToDelete == null)
+            {
+                return HttpNotFound();
+            }
+
+            _context.Users.Remove(userToDelete);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("EditUser", "Account");
+        }
+
+        public ActionResult EditRoles(string Id)
+        {
+
+            var viewModel = new RolesBooleanViewModel()
+            {
+                Id = Id
+            };
+            
+            foreach(var role in _context.Users.SingleOrDefault(u => u.Id == Id).Roles.ToList())
+            {
+                if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd24f"))
+                {
+                    viewModel.CanManageOrganizations = true;
+                }
+                else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd245"))
+                {
+                    viewModel.CanManageProjects = true;
+                }
+                else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd246"))
+                {
+                    viewModel.CanManageTeams = true;
+                }
+                else if (role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd247"))
+                {
+                    viewModel.CanManageTickets = true;
+                }
+            }
+
+            return View(viewModel);
+        }
+        
+        public ActionResult SaveRole(RolesBooleanViewModel rolesBooleanViewModel)
+        {
+            // foreach x in roleboolean
+            // if !in Role and is 1
+            // add in role for that user
+
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(_context));
+
+            var user = _context.Users.SingleOrDefault(u => u.Id == rolesBooleanViewModel.Id);
+
+            // var roles = userManager.GetRolesAsync(rolesBooleanViewModel.Id);
+
+            foreach (var role in user.Roles.ToList())
+            {
+                if (!role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd24f"))
+                {
+                    if (rolesBooleanViewModel.CanManageOrganizations == true)
+                    {
+                        userManager.AddToRole(user.Id, RoleName.CanManageOrganizations);
+                    }
+                }
+                else
+                {
+                    if (rolesBooleanViewModel.CanManageOrganizations == false)
+                    {
+                        userManager.RemoveFromRole(user.Id, RoleName.CanManageOrganizations);
+                    }
+                }
+                
+                if (!role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd245"))
+                {
+                    if (rolesBooleanViewModel.CanManageProjects == true)
+                    {
+                        userManager.AddToRole(user.Id, RoleName.CanManageProjects);
+                    }
+                }
+                else
+                {
+                    if (rolesBooleanViewModel.CanManageProjects == false)
+                    {
+                        userManager.RemoveFromRole(user.Id, RoleName.CanManageProjects);
+                    }
+                }
+                
+                if (!role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd246"))
+                {
+                    if (rolesBooleanViewModel.CanManageTeams == true)
+                    {
+                        userManager.AddToRole(user.Id, RoleName.CanManageTeams);
+                    }
+                }
+                else
+                {
+                    if (rolesBooleanViewModel.CanManageTeams == false)
+                    {
+                        userManager.RemoveFromRole(user.Id, RoleName.CanManageTeams);
+                    }
+                }
+                
+                if (!role.RoleId.Equals("74461dcc-df20-4704-9709-4569c49fd247"))
+                {
+                    if (rolesBooleanViewModel.CanManageTickets == true)
+                    {
+                        userManager.AddToRole(user.Id, RoleName.CanManageTickets);
+                    }
+                }
+                else
+                {
+                    if (rolesBooleanViewModel.CanManageTickets == false)
+                    {
+                        userManager.RemoveFromRole(user.Id, RoleName.CanManageTickets);
+                    }
+                }
+            }
+
+            _context.SaveChanges();
+            
+            return RedirectToAction("EditUser","Account");
+        }
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
