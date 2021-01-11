@@ -18,12 +18,10 @@ namespace Ticketist.Models
 
         [Required]
         [Display(Name = "Start Date")]
-        [RegularExpression(@"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$")]
         [EndDateLowerThanStartDateValidation]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End Date")]
-        [RegularExpression(@"^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$")]
         [EndDateLowerThanStartDateValidation]
         public DateTime? EndDate { get; set; }
 

@@ -53,37 +53,6 @@ namespace Ticketist.Controllers
             return View("IndexReadOnly", viewModel);
         }
 
-        [Route("Projects/{content}")]
-        public ActionResult Index(string content)
-        {
-            // Afiseaza toate proiectele din baza de date
-
-            List<Project> projects = new List<Project>();
-
-            foreach (var userProject in _context.UserProjects.ToList())
-            {
-                foreach (var project1 in _context.Projects.ToList())
-                {
-                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId && project1.Description.Contains(content))
-                    {
-                        projects.Add(project1);
-                    }
-                }
-            }
-
-            var viewModel = new ProjectsViewModel()
-            {
-                Projects = projects
-            };
-
-            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects))
-            {
-                return View("Index", viewModel);
-            }
-
-            return View("IndexReadOnly", viewModel);
-        }
-
         // GET: Projects/Details/id
         [Route("Projects/Details/{Id}")]
         public ActionResult Details(int Id)
