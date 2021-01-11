@@ -82,8 +82,20 @@ namespace Ticketist.Models
         public string ConfirmPassword { get; set; }
 
         [Required]
+        [Display(Name = "Organization")]
+        public int OrganizationId { get; set; }
+
+        [Required]
+        [Display(Name = "Project")]
+        public int ProjectId { get; set; }
+
+        [Required]
         [Display(Name = "Team")]
         public int TeamId { get; set; }
+
+        public IEnumerable<Organization> Organizations { get; set; }
+        
+        public IEnumerable<Project> Projects { get; set; }
         
         public IEnumerable<Team> Teams { get; set; }
 

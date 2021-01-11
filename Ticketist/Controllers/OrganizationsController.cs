@@ -55,6 +55,52 @@ namespace Ticketist.Controllers
 
         }
 
+        [Route("Organizations/Search")]
+        public ActionResult Search()
+        {
+            return View("Search");
+        }
+
+        [HttpPost]
+        public ActionResult SearchThis(string searchString)
+        {
+            return RedirectToAction("/" + Int32.Parse(searchString), "Organizations");
+        }
+
+        [Route("Organizations/{year:regex(\\d{4})}")]
+        public ActionResult Index(int year)
+        {
+            // Afiseaza toate organizatiile din baza de date
+
+            List <Organization> organizations = new List<Organization>();
+
+            foreach (var userOrganization in _context.UserOrganizations.ToList())
+            {
+                foreach (var organization1 in _context.Organizations.ToList())
+                {
+                    if (userOrganization.UserId == User.Identity.GetUserId()
+                        && organization1.Id == userOrganization.OrganizationId
+                        && organization1.FoundationYear == year)
+                    {
+                        organizations.Add(organization1);
+                    }
+                }
+            }
+
+            var viewModel = new OrganizationsViewModel()
+            {
+                Organizations = organizations
+            };
+
+            if (User.IsInRole(RoleName.CanManageOrganizations))
+            {
+                return View("Index", viewModel);
+            }
+
+            return View("IndexReadOnly", viewModel);
+
+        }
+
         // GET: Organizations/Details/id
         [Route("Organizations/Details/{Id}")]
         public ActionResult Details(int Id)
@@ -211,6 +257,8 @@ namespace Ticketist.Controllers
                 uo.UserId == userId && uo.OrganizationId == organization.Id);
 
             _context.UserOrganizations.Remove(org);
+
+            _context.SaveChanges();
 
             _context.Organizations.Remove(organization);
 

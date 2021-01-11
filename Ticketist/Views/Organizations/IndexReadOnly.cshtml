@@ -6,30 +6,32 @@
 
 <h2>Organizations</h2>
 
-@if (Model.Organizations.Count() == 0)
-{
-    <text>There are no organizations.</text>
-}
-else
-{
-    <table id="organizations" class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>Organization</th>
-            <th>Code</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var organization in Model.Organizations)
-        {
-            <tr>
-                <td>@Html.ActionLink(organization.Name, "Details", "Organizations", new {id = organization.Id}, null)</td>
-                <td>@organization.Code</td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
+
+
+    @if (Model.Organizations.Count() == 0)
+    {
+        <text>There are no organizations.</text>
+    }
+    else
+    {
+        <table id="organizations" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Organization</th>
+                    <th>Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var organization in Model.Organizations)
+                {
+                    <tr>
+                        <td>@Html.ActionLink(organization.Name, "Details", "Organizations", new { id = organization.Id }, null)</td>
+                        <td>@organization.Code</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 
 @section scripts
 {

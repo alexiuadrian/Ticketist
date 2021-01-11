@@ -10,7 +10,7 @@
 <br>
 <br />
 
-@if (Model.Projects.Count() == 0)
+@if (!Model.Projects.Any())
 {
     <text>There are no projects.</text>
 }
@@ -18,21 +18,21 @@ else
 {
     <table id="projects" class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>Project</th>
-            <th>Start Date</th>
-            <th>Delete</th>
-        </tr>
+            <tr>
+                <th>Project</th>
+                <th>Start Date</th>
+                <th>Delete</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var project in Model.Projects)
-        {
-            <tr>
-                <td>@Html.ActionLink(project.Name, "Details", "Projects", new {id = project.Id}, null)</td>
-                <td>@project.StartDate.ToString("dd.MM.yyyy")</td>
-                <td>@Html.ActionLink("Delete", "Delete", "Projects", new {id = project.Id}, new {@class = "btn btn-danger"})</td>
-            </tr>
-        }
+            @foreach (var project in Model.Projects)
+            {
+                <tr>
+                    <td>@Html.ActionLink(project.Name, "Details", "Projects", new { id = project.Id }, null)</td>
+                    <td>@project.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@Html.ActionLink("Delete", "Delete", "Projects", new { id = project.Id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
         </tbody>
     </table>
 }

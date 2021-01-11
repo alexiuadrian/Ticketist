@@ -1,0 +1,17 @@
+﻿@model Ticketist.ViewModels.SearchViewModel
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search Project</h2>
+
+@using (Html.BeginForm("SearchThis", "Projects"))
+{
+    <div class="form-group">
+        @Html.LabelFor(m => m.SearchString)
+        @Html.TextBoxFor(m => m.SearchString, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.SearchString)
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+}

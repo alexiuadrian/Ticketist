@@ -1,4 +1,5 @@
-﻿@model Ticketist.ViewModels.OrganizationsViewModel
+﻿@using Ticketist.Models
+@model Ticketist.ViewModels.OrganizationsViewModel
 
 @{
     ViewBag.Title = "Organizations";
@@ -7,10 +8,13 @@
 <h2>Organizations</h2>
 
 @Html.ActionLink("New Organization", "Add", "Organizations", null, new { @class = "btn btn-primary" })
-<br>
 <br />
+<br />
+@Html.ActionLink("Search Organization", "Search", "Organizations", null, new { @class = "btn btn-info" })
+<br/>
+<br/>
 
-@if (Model.Organizations.Count() == 0)
+@if (!Model.Organizations.Any())
 {
     <text>There are no organizations.</text>
 }
@@ -18,21 +22,21 @@ else
 {
     <table id="organizations" class="table table-bordered table-hover">
         <thead>
-        <tr>
-            <th>Organization</th>
-            <th>Code</th>
-            <th>Delete</th>
-        </tr>
+            <tr>
+                <th>Organization</th>
+                <th>Code</th>
+                <th>Delete</th>
+            </tr>
         </thead>
         <tbody>
-        @foreach (var organization in Model.Organizations)
-        {
-            <tr>
-                <td>@Html.ActionLink(organization.Name, "Details", "Organizations", new {id = organization.Id}, null)</td>
-                <td>@organization.Code</td>
-                <td>@Html.ActionLink("Delete", "Delete", "Organizations", new {id = organization.Id}, new {@class = "btn btn-danger"})</td>
-            </tr>
-        }
+            @foreach (var organization in Model.Organizations)
+            {
+                <tr>
+                    <td>@Html.ActionLink(organization.Name, "Details", "Organizations", new { id = organization.Id }, null)</td>
+                    <td>@organization.Code</td>
+                    <td>@Html.ActionLink("Delete", "Delete", "Organizations", new { id = organization.Id }, new { @class = "btn btn-danger" })</td>
+                </tr>
+            }
         </tbody>
     </table>
 }

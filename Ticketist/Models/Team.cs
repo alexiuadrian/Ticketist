@@ -12,7 +12,8 @@ namespace Ticketist.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(3)] 
+        [StringLength(3)]
+        [RegularExpression(@"[A-Z]{3}")]
         public string Code { get; set; }
 
         [Display(Name = "Name of Project")]

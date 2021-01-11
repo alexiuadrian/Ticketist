@@ -160,6 +160,8 @@ namespace Ticketist.Controllers
             
             var viewModel = new RegisterViewModel()
             {
+                Organizations = _context.Organizations.ToList(),
+                Projects = _context.Projects.ToList(),
                 Teams = _context.Teams.ToList(),
                 RoleNames = roleNames
             };
@@ -185,15 +187,27 @@ namespace Ticketist.Controllers
                 if (result.Succeeded)
                 {
                     await UserManager.AddToRoleAsync(user.Id, model.RoleName);
-                    
-                    // await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
+                    _context.UserOrganizations.Add(new UserOrganizations()
+                    {
+                        UserId = user.Id,
+                        OrganizationId = model.OrganizationId
+                    });
+
+                    _context.UserProjects.Add(new UserProjects()
+                    {
+                        UserId = user.Id,
+                        ProjectId = model.ProjectId
+                    });
+
+                    _context.UserTeams.Add(new UserTeams()
+                    {
+                        UserId = user.Id,
+                        TeamId = model.TeamId
+                    });
+
+                    await _context.SaveChangesAsync();
+                    
                     return RedirectToAction("Index", "Home");
                 }
                 AddErrors(result);
@@ -487,6 +501,8 @@ namespace Ticketist.Controllers
             {
                 return HttpNotFound();
             }
+
+            _context.SaveChanges();
 
             _context.Users.Remove(userToDelete);
 

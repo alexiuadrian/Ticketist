@@ -290,6 +290,7 @@
     <Compile Include="ViewModels\ProjectsAndOrganizationsViewModel.cs" />
     <Compile Include="ViewModels\ProjectsViewModel.cs" />
     <Compile Include="ViewModels\RolesBooleanViewModel.cs" />
+    <Compile Include="ViewModels\SearchViewModel.cs" />
     <Compile Include="ViewModels\TeamAndProjectsViewModel.cs" />
     <Compile Include="ViewModels\TeamsAndProjectsAndOrganizationsViewModel.cs" />
     <Compile Include="ViewModels\TeamsViewModel.cs" />
@@ -656,6 +657,8 @@
     <Content Include="Views\Account\EditUser.cshtml" />
     <Content Include="Views\Account\EditRoles.cshtml" />
     <Content Include="Views\Home\IndexLoggedIn.cshtml" />
+    <Content Include="Views\Organizations\Search.cshtml" />
+    <Content Include="Views\Projects\Search.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Controllers\" />

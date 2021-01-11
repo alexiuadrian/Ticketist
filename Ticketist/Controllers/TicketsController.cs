@@ -29,7 +29,7 @@ namespace Ticketist.Controllers
         {
             // Afiseaza toate tichetele din baza de date
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -39,7 +39,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -50,9 +50,9 @@ namespace Ticketist.Controllers
                         teams.Add(team);
                     }
                 }
-            }   
-            
-            List<Project> projects = new List<Project>();
+            }
+
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -65,7 +65,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Ticket> tickets = new List<Ticket>();
+            HashSet<Ticket> tickets = new HashSet<Ticket>();
 
             foreach (var ticket in _context.Tickets.ToList())
             {
@@ -93,7 +93,7 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unui tichet (View separat fata de cel de editare)
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -103,7 +103,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -116,7 +116,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -129,7 +129,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Ticket> tickets = new List<Ticket>();
+            HashSet<Ticket> tickets = new HashSet<Ticket>();
 
             foreach (var ticket in _context.Tickets.ToList())
             {
@@ -142,8 +142,6 @@ namespace Ticketist.Controllers
                 }
             }
 
-            // var ticket = _context.Tickets.SingleOrDefault(t => t.Id == Id);
-
             var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
 
             if (ticket1 == null)
@@ -151,7 +149,7 @@ namespace Ticketist.Controllers
                 return HttpNotFound();
             }
 
-            List<Comment> comments = new List<Comment>();
+            HashSet<Comment> comments = new HashSet<Comment>();
 
             foreach (var comment in _context.Comments.ToList())
             {
@@ -178,7 +176,7 @@ namespace Ticketist.Controllers
         {
             // Editeaza un tichet (View separat fata de cel de detalii)
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -188,7 +186,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -201,7 +199,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -214,7 +212,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Ticket> tickets = new List<Ticket>();
+            HashSet<Ticket> tickets = new HashSet<Ticket>();
 
             foreach (var ticket in _context.Tickets.ToList())
             {
@@ -226,8 +224,6 @@ namespace Ticketist.Controllers
                     }
                 }
             }
-
-            // var ticket1 = _context.Tickets.SingleOrDefault(t => t.Id == Id);
 
             var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
 
@@ -247,7 +243,7 @@ namespace Ticketist.Controllers
         {
             // Adauga un tichet
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -257,7 +253,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -270,7 +266,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -301,7 +297,7 @@ namespace Ticketist.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Save(Ticket ticket)
         {
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -311,7 +307,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -324,7 +320,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -381,7 +377,7 @@ namespace Ticketist.Controllers
         {
             // Sterge un tichet
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -391,7 +387,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team in _context.Teams.ToList())
             {
@@ -404,7 +400,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -417,7 +413,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Ticket> tickets = new List<Ticket>();
+            HashSet<Ticket> tickets = new HashSet<Ticket>();
 
             foreach (var ticket in _context.Tickets.ToList())
             {
@@ -430,14 +426,14 @@ namespace Ticketist.Controllers
                 }
             }
 
-            // var ticket1 = _context.Tickets.SingleOrDefault(o => o.Id == Id);
-
             var ticket1 = tickets.SingleOrDefault(t => t.Id == Id);
 
             if (ticket1 == null)
             {
                 return HttpNotFound();
             }
+
+            _context.SaveChanges();
 
             _context.Tickets.Remove(ticket1);
 

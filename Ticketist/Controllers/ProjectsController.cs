@@ -26,14 +26,45 @@ namespace Ticketist.Controllers
         public ActionResult Index()
         {
             // Afiseaza toate proiectele din baza de date
-            
-            List<Project> projects = new List<Project>();
+
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var userProject in _context.UserProjects.ToList())
             {
                 foreach (var project1 in _context.Projects.ToList())
                 {
                     if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId)
+                    {
+                        projects.Add(project1);
+                    }
+                }
+            }
+
+            var viewModel = new ProjectsViewModel()
+            {
+                Projects = projects
+            };
+
+            if (User.IsInRole(RoleName.CanManageOrganizations) || User.IsInRole(RoleName.CanManageProjects))
+            {
+                return View("Index", viewModel);
+            }
+
+            return View("IndexReadOnly", viewModel);
+        }
+
+        [Route("Projects/{content}")]
+        public ActionResult Index(string content)
+        {
+            // Afiseaza toate proiectele din baza de date
+
+            List<Project> projects = new List<Project>();
+
+            foreach (var userProject in _context.UserProjects.ToList())
+            {
+                foreach (var project1 in _context.Projects.ToList())
+                {
+                    if (userProject.UserId == User.Identity.GetUserId() && project1.Id == userProject.ProjectId && project1.Description.Contains(content))
                     {
                         projects.Add(project1);
                     }
@@ -182,7 +213,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Organization> organizations = new List<Organization>();
+            HashSet<Organization> organizations = new HashSet<Organization>();
 
             foreach (var organization in _context.Organizations.ToList())
             {
@@ -212,8 +243,8 @@ namespace Ticketist.Controllers
         public ActionResult Add()
         {
             // Adauga un proiect
-            
-            List<Project> projects = new List<Project>();
+
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var userProject in _context.UserProjects.ToList())
             {
@@ -226,7 +257,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Organization> organizations = new List<Organization>();
+            HashSet<Organization> organizations = new HashSet<Organization>();
 
             foreach (var organization in _context.Organizations.ToList())
             {
@@ -257,8 +288,8 @@ namespace Ticketist.Controllers
         public ActionResult Delete(int Id)
         {
             // Sterge un proiect
-            
-            List<Project> projects = new List<Project>();
+
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var userProject in _context.UserProjects.ToList())
             {
@@ -284,6 +315,8 @@ namespace Ticketist.Controllers
                 uo.UserId == userId && uo.ProjectId == projectToDelete.Id);
 
             _context.UserProjects.Remove(x);
+
+            _context.SaveChanges();
 
             _context.Projects.Remove(projectToDelete);
 

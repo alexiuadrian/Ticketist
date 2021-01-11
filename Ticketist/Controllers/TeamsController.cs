@@ -66,7 +66,7 @@ namespace Ticketist.Controllers
         public ActionResult Save(Team team)
         {
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -79,7 +79,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var userProject in _context.UserProjects.ToList())
             {
@@ -143,7 +143,7 @@ namespace Ticketist.Controllers
         {
             // Vezi detaliile unei echipe (View separat fata de cel de editare)
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -178,7 +178,7 @@ namespace Ticketist.Controllers
         {
             // Editeaza o echipa (View separat fata de cel de detalii)
 
-            List<UserTeams> userTeams = new List<UserTeams>();
+            HashSet<UserTeams> userTeams = new HashSet<UserTeams>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -188,7 +188,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var team1 in _context.Teams.ToList())
             {
@@ -201,7 +201,7 @@ namespace Ticketist.Controllers
                 }
             }
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var project in _context.Projects.ToList())
             {
@@ -234,7 +234,7 @@ namespace Ticketist.Controllers
         {
             // Adauga o echipa
 
-            List<Project> projects = new List<Project>();
+            HashSet<Project> projects = new HashSet<Project>();
 
             foreach (var userProject in _context.UserProjects.ToList())
             {
@@ -263,7 +263,7 @@ namespace Ticketist.Controllers
         {
             // Sterge o echipa
 
-            List<Team> teams = new List<Team>();
+            HashSet<Team> teams = new HashSet<Team>();
 
             foreach (var userTeam in _context.UserTeams.ToList())
             {
@@ -289,6 +289,8 @@ namespace Ticketist.Controllers
                 uo.UserId == userId && uo.TeamId == team.Id);
 
             _context.UserTeams.Remove(x);
+
+            _context.SaveChanges();
 
             _context.Teams.Remove(team);
 

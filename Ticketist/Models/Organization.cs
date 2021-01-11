@@ -15,6 +15,7 @@ namespace Ticketist.Models
 
         [Required]
         [StringLength(3)]
+        [RegularExpression(@"[A-Z]{3}")]
         [DifferentCodeValidation]
         public string Code { get; set; }
 
@@ -23,6 +24,7 @@ namespace Ticketist.Models
 
         [Required]
         [Display(Name = "Year of Foundation")]
+        [RegularExpression(@"^[0-9]{4}")]
         [YearLowerThanCurrentValidation]
         public int FoundationYear { get; set; }
     }
